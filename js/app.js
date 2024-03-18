@@ -39,21 +39,14 @@ btnSaveNote.addEventListener("click", (evt) =>{
 
 const saveNote = (note) => {
     console.log(note);
-    let notes = localStorage.getItem("notes");
-    if(!notes){
-        notes = [];//Representação do array
-    }
-    else{
-        notes = JSON.parse(notes);
-    }
+    let notes=loadNotes();
 
-
-    if(note.id.length < 1){
+    if(note.id.trim().length < 1){ //Trim, usa-se quando é preciso remover espaços, "sujeiras"
         note.id = new Date().getTime;
     }
     
     else{
-
+        //??
     }
 
     note.lastTime = new Date().getTime();
@@ -66,3 +59,45 @@ const saveNote = (note) => {
     localStorage.setItem('notes', notes);
 
 };
+
+const loadNotes = () =>{
+    let notes = localStorage.getItem("notes");
+    if(!notes){
+        notes = [];//Representação do array
+    }
+    else{
+        notes = JSON.parse(notes);
+    }
+    return notes;
+
+}
+
+const listNotes = () => {
+    let listnotes = loadNotes();
+    console.log(listnotes);
+    listnotes.forEach((note) => {
+        let divCard = document.createElement('div');
+        divCard.className = 'card';
+        divCard.style.width = '25rem';
+        let divCardBody = document.createElement('div');
+        divCardBody.classname = 'card-body';
+        divCard.appendChild(divCardBody);
+        let h5 = document.createElement('h5');
+        h5.innerText = note.title;
+        divCardBody.appendChild(h5);
+        let pContent = document.createElement('p');
+        pContent.innerText = note.content;
+        divCardBody.appendChild(pContent);
+        let pLastTime = document.createElement('p');
+        let time = new Date(note.lastTime);//Converte a data 
+        time = time.toLocaleDateString("pt-BR")
+        console.log(time);
+        pLastTime.innerText = "Atualizado em: "+time;
+        divCardBody.appendChild(pLastTime)
+
+
+        notes.appendChild(divCard);
+    });
+}
+
+listNotes();
