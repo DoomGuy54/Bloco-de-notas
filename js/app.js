@@ -3,12 +3,12 @@
  */
 
 let addNote = document.querySelector('#add-note');//Botão de para adicionar nota
-let btncloseModalView =  document.querySelector('#btn-close-modal'); //fechar janela modal com os detalhes da nota.
+let btncloseModal=  document.querySelector('#btn-close-modal'); //fechar janela modal com os detalhes da nota.
 let modal = document.querySelector('#modal'); //Modal para edição das notas
 let modalView = document.querySelector('#modal-view'); //Modal para exibição dos detalhes da nota
 let notes = document.querySelector('#notes');//Lista divs com dados das notas
 let btnSaveNote = document.querySelector("#btn-save-note"); //icone para salvar nota
-//let btnCloseNote = document.querySelector("#btn-close-modal");//icone para fechar modal de edição de nota.
+let btnCloseNote = document.querySelector("#close-modal-view");//icone para fechar modal de edição de nota.
 
 /*===================== Função e Eventos  ===========================*/
 
@@ -18,7 +18,7 @@ addNote.addEventListener("click", (evt) =>{
     addNote.style.display = "none";
     notes.style.display = "none";
 });
-btncloseModalView.addEventListener("click", (evt) =>{
+btncloseModal.addEventListener("click", (evt) =>{
     evt.preventDefault();
     modal.style.display = "none";
     addNote.style.display = "block";
@@ -33,6 +33,14 @@ btnSaveNote.addEventListener("click", (evt) =>{
     }
 
     saveNote(data);
+});
+
+btnCloseNote.addEventListener('click', (evt) =>{
+    evt.preventDefault();
+    modal.style.display = "none";
+    addNote.style.display = "block";
+    notes.style.display = "flex";
+    modalView.style.display = "none";
 });
 
 /*===================== Funções  ===========================*/
@@ -89,15 +97,33 @@ const listNotes = () => {
         pContent.innerText = note.content;
         divCardBody.appendChild(pContent);
         let pLastTime = document.createElement('p');
-        let time = new Date(note.lastTime);//Converte a data 
-        time = time.toLocaleDateString("pt-BR")
-        console.log(time);
-        pLastTime.innerText = "Atualizado em: "+time;
+        pLastTime.innerText = "Atualizado em: "+DateFormat(note.lastTime);
         divCardBody.appendChild(pLastTime)
 
 
         notes.appendChild(divCard);
+
+        divCard.addEventListener('click', (evt) =>{
+            showNote(note);
+        })
     });
 }
 
+const showNote = (note) =>{
+    notes.style.display = 'none';
+    addNote.style.display = 'none';
+    modalView.style.display = 'block';
+    document.querySelector('#title-note').innerText = note.title; //.innerHTML = "<h1>"+note.title+"</h1>";
+    document.querySelector('#content-note').innerHTML = `<p>${note.content}</p>
+    <p>Última alteração: ${DateFormat(note.lastTime)}</p>`
+}
+
+const DateFormat = (timestamp) => {
+    let date = new Date(timestamp);//Converte a data 
+    date = date.toLocaleDateString("pt-BR");
+    return date;
+};
+
+
 listNotes();
+
