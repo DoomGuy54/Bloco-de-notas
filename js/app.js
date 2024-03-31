@@ -98,8 +98,23 @@ const listNotes = () => {
         divCardBody.appendChild(pContent);
         let pLastTime = document.createElement('p');
         pLastTime.innerText = "Atualizado em: "+DateFormat(note.lastTime);
-        divCardBody.appendChild(pLastTime)
+        divCardBody.appendChild(pLastTime);
 
+        //----------Incones----------//
+        let divIconA = document.createElement('div');
+        divIconA.className = 'Trash';
+        divCardBody.appendChild(divIconA);
+        let IconTrash = document.createElement('i');
+        IconTrash.style.color = 'red';
+        IconTrash.className = 'bi bi-trash';
+        divIconA.appendChild(IconTrash);
+        let divIconB = document.createElement('div');
+        divIconB.className = 'Disk';
+        divCardBody.appendChild(divIconB);
+        let IconDisk = document.createElement('i');
+        IconDisk.style.color = 'blue';
+        IconDisk.className = 'bi bi-sd-card';
+        divIconB.appendChild(IconDisk);
 
         notes.appendChild(divCard);
 
@@ -115,7 +130,7 @@ const showNote = (note) =>{
     modalView.style.display = 'block';
     document.querySelector('#title-note').innerText = note.title; //.innerHTML = "<h1>"+note.title+"</h1>";
     document.querySelector('#content-note').innerHTML = `<p>${note.content}</p>
-    <p>Última alteração: ${DateFormat(note.lastTime)}</p>`
+    <p>Última alteração: ${DateFormat(note.lastTime)}</p>`;
 }
 
 const DateFormat = (timestamp) => {
