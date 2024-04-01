@@ -87,6 +87,7 @@ const listNotes = () => {
         let divCard = document.createElement('div');
         divCard.className = 'card';
         divCard.style.width = '25rem';
+        divCard.style.borderColor = '#1b85dc';
         let divCardBody = document.createElement('div');
         divCardBody.classname = 'card-body';
         divCard.appendChild(divCardBody);
