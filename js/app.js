@@ -31,7 +31,7 @@ btnSaveNote.addEventListener("click", (evt) =>{
         title: document.querySelector("#input-title").value ,
         content: document.querySelector("#input-content").value
     }
-
+    console.log(data);
     saveNote(data);
 });
 
@@ -41,6 +41,7 @@ btnCloseNote.addEventListener('click', (evt) =>{
     addNote.style.display = "block";
     notes.style.display = "flex";
     modalView.style.display = "none";
+    //divEdit.style.display = "none";
 });
 
 /*===================== Funções  ===========================*/
@@ -48,23 +49,27 @@ btnCloseNote.addEventListener('click', (evt) =>{
 const saveNote = (note) => {
     console.log(note);
     let notes=loadNotes();
-
-    if(note.id.trim().length < 1){ //Trim, usa-se quando é preciso remover espaços, "sujeiras"
-        note.id = new Date().getTime;
+    note.lastTime = new Date().getTime();
+    console.log(note);
+    if(note.id.length < 1){ //Trim, usa-se quando é preciso remover espaços, "sujeiras"
+        note.id = new Date().getTime();
+        notes.push(note);
+        document.querySelector('#input-id').value = note.id;
     }
     
     else{
-        //??
+        notes.forEach((item, i) => {
+            if(item.id == note.id){
+                notes[i] = note;
+            }
+        });
     }
-
-    note.lastTime = new Date().getTime();
-
-
-    notes.push(note);
 
     notes = JSON.stringify(notes);
 
     localStorage.setItem('notes', notes);
+
+    listNotes();
 
 };
 
@@ -81,6 +86,7 @@ const loadNotes = () =>{
 }
 
 const listNotes = () => {
+    notes.innerHTML = '';
     let listnotes = loadNotes();
     console.log(listnotes);
     listnotes.forEach((note) => {
@@ -101,8 +107,8 @@ const listNotes = () => {
         pLastTime.innerText = "Atualizado em: "+DateFormat(note.lastTime);
         divCardBody.appendChild(pLastTime);
 
-        //----------Incones----------//
-        let divIconA = document.createElement('div');
+        //----------Icones----------//
+        /*let divIconA = document.createElement('div');
         divIconA.className = 'Trash';
         divCardBody.appendChild(divIconA);
         let IconTrash = document.createElement('i');
@@ -115,7 +121,7 @@ const listNotes = () => {
         let IconDisk = document.createElement('i');
         IconDisk.style.color = 'blue';
         IconDisk.className = 'bi bi-sd-card';
-        divIconB.appendChild(IconDisk);
+        divIconB.appendChild(IconDisk);*/
 
         notes.appendChild(divCard);
 
@@ -132,6 +138,29 @@ const showNote = (note) =>{
     document.querySelector('#title-note').innerText = note.title; //.innerHTML = "<h1>"+note.title+"</h1>";
     document.querySelector('#content-note').innerHTML = `<p>${note.content}</p>
     <p>Última alteração: ${DateFormat(note.lastTime)}</p>`;
+    let divEdit = document.createElement('div');
+    let iEdit = document.createElement('i');
+    iEdit.className = 'bi bi-pen';
+    divEdit.appendChild(iEdit);
+    document.querySelector('#controls-note').appendChild(divEdit);
+    divEdit.addEventListener('click', (evt) =>{
+        evt.preventDefault();
+        document.querySelector("#input-id").value = note.id;
+        document.querySelector("#input-title").value = note.title;
+        document.querySelector("#input-content").value = note.content;
+        evt.preventDefault();
+        modal.style.display = "block";
+        addNote.style.display = "none";
+        notes.style.display = "none";
+        modalView.style.display = "none";
+        saveNote(note);
+
+    });
+    let divDel = document.createElement('div');
+    let iDel = document.createElement('i');
+    iDel.className = 'bi bi-trash';
+    divDel.appendChild(iDel);
+    document.querySelector('#controls-note').appendChild(divDel);
 }
 
 const DateFormat = (timestamp) => {
