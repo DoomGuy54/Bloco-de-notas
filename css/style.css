@@ -2,6 +2,10 @@
     margin:0;
     padding:0;
   }
+
+  body{
+    background-color: rgb(243, 243, 143);
+  }
   
   header{
     border-bottom: 1px solid #1b85dc;
@@ -46,6 +50,7 @@
     display:none;
     width: 90vw;
     padding:10px;
+    background-color: white;
    
   }
   
@@ -59,6 +64,8 @@
     padding:2vh 2vw;
     display:none;
     width: 90vw;
+    background-color: white;
+
   }
   
   #controls-note{

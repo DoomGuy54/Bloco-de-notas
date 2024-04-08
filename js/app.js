@@ -93,7 +93,9 @@ const listNotes = () => {
         let divCard = document.createElement('div');
         divCard.className = 'card';
         divCard.style.width = '25rem';
-        divCard.style.borderColor = '#1b85dc';
+        divCard.style.margin = '6px';
+        divCard.style.borderColor = 'blue';
+        divCard.style.borderRadius = '10px'
         let divCardBody = document.createElement('div');
         divCardBody.classname = 'card-body';
         divCard.appendChild(divCardBody);
@@ -138,29 +140,38 @@ const showNote = (note) =>{
     document.querySelector('#title-note').innerText = note.title; //.innerHTML = "<h1>"+note.title+"</h1>";
     document.querySelector('#content-note').innerHTML = `<p>${note.content}</p>
     <p>Última alteração: ${DateFormat(note.lastTime)}</p>`;
+
+    document.querySelector('#controls-note').innerHTML = '';
+
     let divEdit = document.createElement('div');
     let iEdit = document.createElement('i');
     iEdit.className = 'bi bi-pen';
+    iEdit.style.color = 'green';
     divEdit.appendChild(iEdit);
     document.querySelector('#controls-note').appendChild(divEdit);
-    divEdit.addEventListener('click', (evt) =>{
-        evt.preventDefault();
+    divEdit.addEventListener('click', () => {
         document.querySelector("#input-id").value = note.id;
         document.querySelector("#input-title").value = note.title;
         document.querySelector("#input-content").value = note.content;
-        evt.preventDefault();
         modal.style.display = "block";
         addNote.style.display = "none";
         notes.style.display = "none";
         modalView.style.display = "none";
-        saveNote(note);
-
     });
+    
     let divDel = document.createElement('div');
     let iDel = document.createElement('i');
     iDel.className = 'bi bi-trash';
+    iDel.style.color = 'red';
     divDel.appendChild(iDel);
     document.querySelector('#controls-note').appendChild(divDel);
+    divDel.addEventListener('click', () => deleteNote(note.id));
+    const deleteNote = (id) => {
+        let notes = loadNotes();
+        notes = notes.filter(note => note.id !== id);
+        localStorage.setItem('notes', JSON.stringify(notes));
+        listNotes();
+    };
 }
 
 const DateFormat = (timestamp) => {
